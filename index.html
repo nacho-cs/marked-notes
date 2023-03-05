@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A way to take notes in markdown and have them appear properly."
+    />
+    <meta
+      name="keywords"
+      content="notetaking, notes, bootstrap, markdown, html, css, frontend, javascript"
+    />
+    <meta name="author" content="nacho-cs" />
+    <title>• marked notes</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@500"
+    />
+  </head>
+
+  <body
+    class="overflow-y-visible overflow-x-hidden"
+    style="font-family: 'Roboto', sans-serif"
+    onload="parse(); getText()"
+  >
+    <style>
+      :root {
+        --bg: #fff;
+        --text: #000;
+        --hover: #d3d3d3;
+      }
+
+      .deco {
+        background-color: var(--bg);
+        transition: all 200ms ease-in-out;
+        border-radius: 50%;
+      }
+
+      .deco:hover {
+        background-color: var(--hover);
+      }
+
+      img {
+        width: 100%;
+      }
+    </style>
+
+    <header
+      class="navbar navbar-expand border-bottom shadow-sm user-select-none"
+    >
+      <div class="container-fluid" style="width: 95%">
+        <div class="navbar-brand">
+          <a href="./" class="nav-link"
+            ><h4 style="font-weight: 700; margin: auto">• marked notes</h4></a
+          >
+        </div>
+        <ul
+          class="navbar-nav flex justify-content-between"
+          style="width: fit-content"
+        >
+          <li
+            class="nav-item material-symbols-outlined nav-link deco"
+            title="• share your notes"
+            onclick="copyUrl(); document.querySelector('.alert').classList.remove('visually-hidden') "
+            style="color: #000"
+          >
+            send
+          </li>
+          <li
+            class="nav-item material-symbols-outlined nav-link deco"
+            title="• copy your notes"
+            onclick="copyNotes(); document.querySelector('.alert').classList.remove('visually-hidden')"
+            style="color: #000"
+          >
+            content_copy
+          </li>
+          <li
+            class="nav-item material-symbols-outlined nav-link deco"
+            title="• export your notes"
+            style="color: #000"
+            onclick="exportNotes()"
+          >
+            download
+          </li>
+        </ul>
+      </div>
+    </header>
+
+    <div
+      class="alert alert-success alert-dismissible text-center shadow-sm visually-hidden"
+      role="alert"
+    >
+      Copied!
+      <button
+        class="btn-close"
+        onclick="document.querySelector('.alert').classList.add('visually-hidden')"
+      ></button>
+    </div>
+
+    <div class="container-fluid mt-2 h-75">
+      <div class="row">
+        <div class="col-6 text-center">
+          <textarea
+            class="shadow-sm border rounded p-2 w-100"
+            style="outline: none"
+            rows="15"
+          ></textarea>
+        </div>
+        <div
+          class="col-6 border rounded shadow-sm bg-white p-2"
+          id="output"
+          style="width: 49%"
+        ></div>
+      </div>
+    </div>
+    <!-- marked, converts markdown to html -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- bootstrap, css framework -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+    <!-- dom-to-image, converts html elements to images -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"
+      integrity="sha512-01CJ9/g7e8cUmY0DFTMcUw/ikS799FHiOA0eyHsUWfOetgbx/t6oV4otQ5zXKQyIrQGTHSmRVPIgrgLcZi/WMA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      document.querySelector("textarea").addEventListener("input", parse);
+      document.querySelector("textarea").addEventListener("input", addtoURL);
+
+      function parse() {
+        document.querySelector("#output").innerHTML = marked.parse(
+          document.querySelector("textarea").value
+        );
+        localStorage.setItem("text", document.querySelector("textarea").value);
+        document.title = `${
+          document.querySelector("#output").firstChild == null
+            ? ""
+            : document.querySelector("#output").firstChild.innerText
+        } • marked notes`;
+      }
+
+      function getText() {
+        document.querySelector("textarea").value = localStorage.getItem("text");
+      }
+
+      function copyNotes() {
+        document.querySelector("textarea").select;
+        navigator.clipboard.writeText(document.querySelector("textarea").value);
+      }
+
+      function copyUrl() {
+        navigator.clipboard.writeText(window.location.href);
+      }
+
+      if (document.readyState == "loading") {
+        document.addEventListener("DOMContentLoaded", URLtoInput);
+      } else {
+        URLtoInput();
+      }
+
+      function URLtoInput() {
+        const url = new URL(window.location);
+        const notes = new URLSearchParams(url.search).get("notes");
+        document.querySelector("textarea").value = notes;
+      }
+
+      function addtoURL() {
+        const url = new URL(window.location);
+        const notes = document.querySelector("textarea").value;
+        url.searchParams.set("notes", notes);
+        window.history.pushState(null, null, url);
+      }
+
+      function exportNotes() {
+        domtoimage
+          .toPng(document.querySelector("#output"))
+          .then((url) => {
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `${document.title}.png`;
+            link.click();
+          })
+          .catch((err) => console.log(err));
+      }
+    </script>
+  </body>
+</html>
