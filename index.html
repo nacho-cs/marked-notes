@@ -31,9 +31,37 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@500"
     />
     <link
-      href="https://cdn-icons-png.flaticon.com/512/35/35777.png"
+      href="./format_list_bulleted_FILL0_wght400_GRAD0_opsz48.png"
       rel="icon"
     />
+    <!-- no xss attacks ._. -->
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.1/purify.min.js"
+      integrity="sha512-TU4FJi5o+epsahLtM9OFRvH2gXmmlzGlysk9wtTFgbYbMvFzh3Cw1l3ubnYIvBiZCC/aurRHS408TeEbcuOoyQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <!-- marked, converts markdown to html -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"
+    ></script>
+    <!-- bootstrap, css framework -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+    <!-- dom-to-image, converts html elements to images -->
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"
+      integrity="sha512-01CJ9/g7e8cUmY0DFTMcUw/ikS799FHiOA0eyHsUWfOetgbx/t6oV4otQ5zXKQyIrQGTHSmRVPIgrgLcZi/WMA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
   </head>
 
   <body
@@ -117,42 +145,27 @@
 
     <div class="container-fluid mt-2 h-75">
       <div class="row">
-        <div class="col-6 text-center">
+        <div class="col-6 text-center justify-content-center">
           <textarea
-            class="shadow-sm border rounded p-2 w-100"
+            class="shadow-sm border rounded w-100 p-2"
             style="outline: none"
-            rows="15"
+            rows="20"
           ></textarea>
         </div>
         <div
-          class="col-6 border rounded shadow-sm bg-white p-2"
-          id="output"
+          class="col-6 border rounded shadow-sm bg-white"
           style="width: 49%"
+          id="output"
         ></div>
       </div>
     </div>
-    <!-- marked, converts markdown to html -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- bootstrap, css framework -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-      crossorigin="anonymous"
-    ></script>
-    <!-- dom-to-image, converts html elements to images -->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"
-      integrity="sha512-01CJ9/g7e8cUmY0DFTMcUw/ikS799FHiOA0eyHsUWfOetgbx/t6oV4otQ5zXKQyIrQGTHSmRVPIgrgLcZi/WMA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
     <script>
       document.querySelector("textarea").addEventListener("input", parse);
       document.querySelector("textarea").addEventListener("input", addtoURL);
 
       function parse() {
-        document.querySelector("#output").innerHTML = marked.parse(
-          document.querySelector("textarea").value
+        document.querySelector("#output").innerHTML = DOMPurify.sanitize(
+          marked.parse(document.querySelector("textarea").value)
         );
         localStorage.setItem("text", document.querySelector("textarea").value);
         document.title = `${
