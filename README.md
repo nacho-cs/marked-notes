@@ -10,6 +10,7 @@
 - [Boostrap](https://getboostrap.com)
 - [marked.js](https://github.com/markedjs/marked)
 - [dom-to-image](https://github.com/tsayen/dom-to-image)
+- [DOMPurify](https://github.com/cure53/DOMPurify)
 
 ### Credit
 - Favicon from [Material Symbols](https://fonts.google.com/icons)
