@@ -65,8 +65,12 @@
   </head>
 
   <body
-    class="overflow-y-visible overflow-x-hidden"
-    style="font-family: 'Roboto', sans-serif"
+    class="overflow-x-hidden"
+    style="
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--bg);
+      transition: all 200ms ease-in-out;
+    "
     onload="parse(); document.querySelector('textarea').value = localStorage.getItem('text'); "
   >
     <style>
@@ -76,9 +80,14 @@
         --hover: #d3d3d3;
       }
 
+      .dark {
+        --bg: #212529;
+        --text: #f8f9fa;
+        --hover: #323232;
+      }
+
       .deco {
         background-color: var(--bg);
-        transition: all 200ms ease-in-out;
         border-radius: 50%;
       }
 
@@ -97,7 +106,9 @@
       <div class="container-fluid" style="width: 95%">
         <div class="navbar-brand">
           <a href="./" class="nav-link"
-            ><h4 style="font-weight: 700; margin: auto">• marked notes</h4></a
+            ><h4 style="font-weight: 700; margin: auto; color: var(--text)">
+              • marked notes
+            </h4></a
           >
         </div>
         <ul
@@ -105,8 +116,16 @@
           style="width: fit-content"
         >
           <li
+            class="nav-item nav-link material-symbols-outlined deco"
+            title="• dark/light theme"
+            style="color: var(--text)"
+            onclick="document.body.classList.toggle('dark')"
+          >
+            nightlight
+          </li>
+          <li
             class="nav-item material-symbols-outlined nav-link deco"
-            title="• hide the input"
+            title="• minimize the input"
             onclick="hide()"
             style="color: var(--text)"
             id="collapse"
@@ -116,7 +135,7 @@
           <li
             class="nav-item material-symbols-outlined nav-link deco"
             title="• share your notes"
-            onclick="navigator.clipboard.writeText(window.location.href); document.querySelector('.alert').classList.remove('visually-hidden') "
+            onclick="copyLink()"
             style="color: var(--text)"
           >
             send
@@ -124,7 +143,7 @@
           <li
             class="nav-item material-symbols-outlined nav-link deco"
             title="• copy your notes"
-            onclick="navigator.clipboard.writeText(document.querySelector('textarea').value); document.querySelector('.alert').classList.remove('visually-hidden')"
+            onclick="copyNotes()"
             style="color: var(--text)"
           >
             content_copy
@@ -143,27 +162,44 @@
 
     <div
       class="alert alert-light alert-dismissible text-center shadow-sm visually-hidden"
+      id="copy-link"
       role="alert"
     >
-      Copied!
+      • copied link
       <button
         class="btn-close"
-        onclick="document.querySelector('.alert').classList.add('visually-hidden')"
+        onclick="document.querySelector('#copy-link').classList.add('visually-hidden')"
       ></button>
     </div>
 
-    <div class="container-fluid mt-2 h-75">
+    <div
+      class="alert alert-light alert-dismissible text-center shadow-sm visually-hidden"
+      id="copy-notes"
+      role="alert"
+    >
+      • copied notes
+      <button
+        class="btn-close"
+        onclick="document.querySelector('#copy-notes').classList.add('visually-hidden')"
+      ></button>
+    </div>
+
+    <div class="container-fluid mt-2 h-75" style="width: 98%">
       <div class="row">
         <div class="col-6 text-center justify-content-center" id="input">
           <textarea
             class="shadow-sm border rounded w-100 p-2"
-            style="outline: none"
+            style="
+              outline: none;
+              background-color: var(--bg);
+              color: var(--text);
+            "
             rows="20"
           ></textarea>
         </div>
         <div
-          class="col-6 border rounded shadow-sm bg-white"
-          style="width: 49%"
+          class="col-6 border rounded shadow-sm"
+          style="width: 49%; background-color: var(--bg); color: var(--text)"
           id="output"
         ></div>
       </div>
@@ -182,9 +218,9 @@
         localStorage.setItem("text", document.querySelector("textarea").value);
         document.title = `${
           document.querySelector("#output").firstChild == null
-            ? ""
-            : document.querySelector("#output").firstChild.innerText
-        } • marked notes`;
+            ? "• marked notes"
+            : "• " + document.querySelector("#output").firstChild.innerText
+        }`;
       }
 
       if (document.readyState == "loading") {
@@ -227,6 +263,20 @@
           .innerText.includes("back")
           ? "arrow_forward_ios"
           : "arrow_back_ios";
+      }
+
+      function copyLink() {
+        navigator.clipboard.writeText(window.location.href);
+        document
+          .querySelector("#copy-link")
+          .classList.remove("visually-hidden");
+      }
+
+      function copyNotes() {
+        navigator.clipboard.writeText(document.querySelector("textarea").value);
+        document
+          .querySelector("#copy-notes")
+          .classList.remove("visually-hidden");
       }
     </script>
   </body>
