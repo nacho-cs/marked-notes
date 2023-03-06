@@ -12,4 +12,4 @@
 - [dom-to-image](https://github.com/tsayen/dom-to-image)
 
 ### Credit
-- Favicon made by [Freepik](https://www.flaticon.com/free-icon/smile-hand-drawn-emoticon_35777)
+- Favicon from [Material Symbols](https://fonts.google.com/icons)
