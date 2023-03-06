@@ -34,7 +34,7 @@
       href="./format_list_bulleted_FILL0_wght400_GRAD0_opsz48.png"
       rel="icon"
     />
-    <!-- no xss attacks ._. -->
+    <!-- no xss attacks ^^ -->
     <script
       defer
       src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.1/purify.min.js"
@@ -67,7 +67,7 @@
   <body
     class="overflow-y-visible overflow-x-hidden"
     style="font-family: 'Roboto', sans-serif"
-    onload="parse(); getText()"
+    onload="parse(); document.querySelector('textarea').value = localStorage.getItem('text'); "
   >
     <style>
       :root {
@@ -106,24 +106,33 @@
         >
           <li
             class="nav-item material-symbols-outlined nav-link deco"
+            title="• hide the input"
+            onclick="hide()"
+            style="color: var(--text)"
+            id="collapse"
+          >
+            arrow_back_ios
+          </li>
+          <li
+            class="nav-item material-symbols-outlined nav-link deco"
             title="• share your notes"
-            onclick="copyUrl(); document.querySelector('.alert').classList.remove('visually-hidden') "
-            style="color: #000"
+            onclick="navigator.clipboard.writeText(window.location.href); document.querySelector('.alert').classList.remove('visually-hidden') "
+            style="color: var(--text)"
           >
             send
           </li>
           <li
             class="nav-item material-symbols-outlined nav-link deco"
             title="• copy your notes"
-            onclick="copyNotes(); document.querySelector('.alert').classList.remove('visually-hidden')"
-            style="color: #000"
+            onclick="navigator.clipboard.writeText(document.querySelector('textarea').value); document.querySelector('.alert').classList.remove('visually-hidden')"
+            style="color: var(--text)"
           >
             content_copy
           </li>
           <li
             class="nav-item material-symbols-outlined nav-link deco"
             title="• export your notes"
-            style="color: #000"
+            style="color: var(--text)"
             onclick="exportNotes()"
           >
             download
@@ -133,7 +142,7 @@
     </header>
 
     <div
-      class="alert alert-success alert-dismissible text-center shadow-sm visually-hidden"
+      class="alert alert-info alert-dismissible text-center shadow-sm visually-hidden"
       role="alert"
     >
       Copied!
@@ -145,7 +154,7 @@
 
     <div class="container-fluid mt-2 h-75">
       <div class="row">
-        <div class="col-6 text-center justify-content-center">
+        <div class="col-6 text-center justify-content-center" id="input">
           <textarea
             class="shadow-sm border rounded w-100 p-2"
             style="outline: none"
@@ -160,8 +169,10 @@
       </div>
     </div>
     <script>
-      document.querySelector("textarea").addEventListener("input", parse);
-      document.querySelector("textarea").addEventListener("input", addtoURL);
+      document.querySelector("textarea").addEventListener("input", () => {
+        parse();
+        addtoURL();
+      });
 
       function parse() {
         document.querySelector("#output").innerHTML = DOMPurify.sanitize(
@@ -173,19 +184,6 @@
             ? ""
             : document.querySelector("#output").firstChild.innerText
         } • marked notes`;
-      }
-
-      function getText() {
-        document.querySelector("textarea").value = localStorage.getItem("text");
-      }
-
-      function copyNotes() {
-        document.querySelector("textarea").select;
-        navigator.clipboard.writeText(document.querySelector("textarea").value);
-      }
-
-      function copyUrl() {
-        navigator.clipboard.writeText(window.location.href);
       }
 
       if (document.readyState == "loading") {
@@ -217,6 +215,17 @@
             link.click();
           })
           .catch((err) => console.log(err));
+      }
+
+      function hide() {
+        document.querySelector("#input").classList.toggle("visually-hidden");
+        document.querySelector("#output").classList.toggle("col-6");
+        document.querySelector("#output").classList.toggle("col");
+        document.querySelector("#collapse").innerText = document
+          .querySelector("#collapse")
+          .innerText.includes("back")
+          ? "arrow_forward_ios"
+          : "arrow_back_ios";
       }
     </script>
   </body>
