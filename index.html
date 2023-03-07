@@ -71,7 +71,7 @@
       background-color: var(--bg);
       transition: all 200ms ease-in-out;
     "
-    onload="document.querySelector('textarea').value = localStorage.getItem('text') ? localStorage.getItem('text') : '# type here'; parse()"
+    onload="parse(); localStorage.getItem('text') ? document.querySelector('textarea').value = localStorage.getItem('text'): '# type here'"
   >
     <style>
       :root {
@@ -163,7 +163,6 @@
     <div
       class="alert alert-info alert-dismissible text-center shadow-sm visually-hidden"
       id="copy-link"
-      role="alert"
     >
       • copied link
       <button
@@ -175,12 +174,22 @@
     <div
       class="alert alert-info alert-dismissible text-center shadow-sm visually-hidden"
       id="copy-notes"
-      role="alert"
     >
       • copied notes
       <button
         class="btn-close"
         onclick="document.querySelector('#copy-notes').classList.add('visually-hidden')"
+      ></button>
+    </div>
+
+    <div
+      class="alert alert-warning alert-dismissible text-center shadow-sm visually-hidden"
+      id="show-cors-error"
+    >
+      • failed to download image
+      <button
+        class="btn-close"
+        onclick="document.querySelector('#show-cors-error').classList.add('visually-hidden')"
       ></button>
     </div>
 
@@ -252,7 +261,12 @@
             link.download = `${document.title}.png`;
             link.click();
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            document
+              .querySelector("#show-cors-error")
+              .classList.remove("visually-hidden");
+            console.log(err);
+          });
       }
 
       function hide() {
