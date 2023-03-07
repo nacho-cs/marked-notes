@@ -71,7 +71,7 @@
       background-color: var(--bg);
       transition: all 200ms ease-in-out;
     "
-    onload="parse(); document.querySelector('textarea').value = localStorage.getItem('text'); "
+    onload="parse(); localStorage.getItem('text') ? document.querySelector('textarea').value = localStorage.getItem('text'): '# type here'"
   >
     <style>
       :root {
@@ -161,30 +161,26 @@
     </header>
 
     <div
-      class="alert alert-dismissible text-center shadow-sm visually-hidden"
+      class="alert alert-info alert-dismissible text-center shadow-sm visually-hidden"
       id="copy-link"
       role="alert"
-      style="background-color: var(--bg); color: var(--text)"
     >
       • copied link
       <button
         class="btn-close"
         onclick="document.querySelector('#copy-link').classList.add('visually-hidden')"
-        style="color: var(--text)"
       ></button>
     </div>
 
     <div
-      class="alert alert-dismissible text-center shadow-sm visually-hidden"
+      class="alert alert-info alert-dismissible text-center shadow-sm visually-hidden"
       id="copy-notes"
       role="alert"
-      style="background-color: var(--bg); color: var(--text)"
     >
       • copied notes
       <button
         class="btn-close"
         onclick="document.querySelector('#copy-notes').classList.add('visually-hidden')"
-        style="color: var(--text)"
       ></button>
     </div>
 
@@ -209,6 +205,7 @@
       </div>
     </div>
     <br /><br /><br />
+
     <script>
       document.querySelector("textarea").addEventListener("input", () => {
         parse();
