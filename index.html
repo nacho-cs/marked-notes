@@ -71,7 +71,7 @@
       background-color: var(--bg);
       transition: all 200ms ease-in-out;
     "
-    onload="parse(); localStorage.getItem('text') ? document.querySelector('textarea').value = localStorage.getItem('text'): '# type here'"
+    onload="parse(); document.querySelector('textarea').value = localStorage.getItem('text') ? localStorage.getItem('text') : '# type here'"
   >
     <style>
       :root {
