@@ -248,7 +248,7 @@
       function addtoURL() {
         const url = new URL(window.location);
         const notes = document.querySelector("textarea").value;
-        url.searchParams.set("notes", (notes);
+        url.searchParams.set("notes", notes);
         window.history.pushState(null, null, url);
       }
 
