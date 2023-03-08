@@ -312,7 +312,7 @@
 
       // copy your notes
       function copyNotes() {
-        navigator.clipboard.writeText(document.querySelector("textarea").value);
+        navigator.clipboard.writeText(document.querySelector("#output").innerText);
         document
           .querySelector("#copy-notes")
           .classList.remove("visually-hidden");
