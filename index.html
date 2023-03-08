@@ -71,7 +71,7 @@
       background-color: var(--bg);
       transition: all 200ms ease-in-out;
     "
-    onload="document.querySelector('textarea').value = localStorage.getItem('text') != null && localStorage.getItem('text') != 'ée' ?  localStorage.getItem('text') : '# type here'; parse()"
+    onload="document.querySelector('textarea').value = localStorage.getItem('text') ?  localStorage.getItem('text') : '# type here'; parse()"
   >
     <style>
       :root {
@@ -242,13 +242,13 @@
       function URLtoInput() {
         const url = new URL(window.location);
         const notes = new URLSearchParams(url.search).get("notes");
-        document.querySelector("textarea").value = atob(notes);
+        document.querySelector("textarea").value = notes;
       }
 
       function addtoURL() {
         const url = new URL(window.location);
         const notes = document.querySelector("textarea").value;
-        url.searchParams.set("notes", btoa(notes));
+        url.searchParams.set("notes", (notes);
         window.history.pushState(null, null, url);
       }
 
