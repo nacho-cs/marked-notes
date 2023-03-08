@@ -14,6 +14,8 @@
     />
     <meta name="author" content="nacho-cs" />
     <title>• marked notes</title>
+
+    <!-- make everything look pretty -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -33,7 +35,16 @@
     <link
       href="./format_list_bulleted_FILL0_wght400_GRAD0_opsz48.png"
       rel="icon"
+      style="border-radius: 50%"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css"
+      integrity="sha512-Ya9H+OPj8NgcQk34nCrbehaA0atbzGdZCI2uCbqVRELgnlrh8vQ2INMnkadVMSniC54HChLIh5htabVuKJww8g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
     <!-- no xss attacks ^^ -->
     <script
       defer
@@ -42,10 +53,11 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <!-- marked, converts markdown to html -->
     <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"
+      src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.1/markdown-it.min.js"
+      integrity="sha512-SYfDUYPg5xspsG6OOpXU366G8SZsdHOhqk/icdrYJ2E/WKZxPxze7d2HD3AyXpT7U22PZ5y74xRpqZ6A2bJ+kQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     ></script>
     <!-- bootstrap, css framework -->
     <script
@@ -66,24 +78,24 @@
 
   <body
     class="overflow-x-hidden"
-    style="
-      font-family: 'Roboto', sans-serif;
-      background-color: var(--bg);
-      transition: all 200ms ease-in-out;
-    "
+    style="font-family: 'Roboto', sans-serif; background-color: var(--bg)"
     onload="document.querySelector('textarea').value = localStorage.getItem('text') ?  localStorage.getItem('text') : '# type here'; parse()"
   >
     <style>
-      :root {
-        --bg: #fff;
-        --text: #000;
-        --hover: #d3d3d3;
+      @media (prefers-color-scheme: light) {
+        body {
+          --bg: #fff;
+          --text: #2f2924;
+          --hover: #d3d3d3;
+        }
       }
 
-      .dark {
-        --bg: #212529;
-        --text: #f8f9fa;
-        --hover: #323232;
+      @media (prefers-color-scheme: dark) {
+        body {
+          --bg: #0d1117;
+          --text: #d9d1c9;
+          --hover: #323232;
+        }
       }
 
       .deco {
@@ -97,6 +109,11 @@
 
       img {
         width: 100%;
+      }
+
+      .alert,
+      .navbar {
+        user-select: none;
       }
     </style>
 
@@ -115,14 +132,6 @@
           class="navbar-nav flex justify-content-between"
           style="width: fit-content"
         >
-          <li
-            class="nav-item nav-link material-symbols-outlined deco"
-            title="• dark/light theme"
-            style="color: var(--text)"
-            onclick="document.body.classList.toggle('dark')"
-          >
-            nightlight
-          </li>
           <li
             class="nav-item material-symbols-outlined nav-link deco"
             title="• minimize the input"
@@ -207,8 +216,8 @@
           ></textarea>
         </div>
         <div
-          class="col-6 border rounded shadow-sm"
-          style="width: 49%; background-color: var(--bg); color: var(--text)"
+          class="col-6 border rounded shadow-sm markdown-body"
+          style="width: 49%; padding: 15px"
           id="output"
         ></div>
       </div>
@@ -223,7 +232,7 @@
 
       function parse() {
         document.querySelector("#output").innerHTML = DOMPurify.sanitize(
-          marked.parse(document.querySelector("textarea").value)
+          window.markdownit().render(document.querySelector("textarea").value)
         );
         localStorage.setItem("text", document.querySelector("textarea").value);
         document.title = `${
