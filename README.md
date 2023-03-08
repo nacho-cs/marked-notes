@@ -8,7 +8,8 @@
 ### Tools used
 
 - [Boostrap](https://getboostrap.com)
-- [marked.js](https://github.com/markedjs/marked)
+- [markdown-it](https://github.com/markdown-it/markdown-it)
+- [github-markdown-css](https://github.com/sindresorhus/github-markdown-css)
 - [dom-to-image](https://github.com/tsayen/dom-to-image)
 - [DOMPurify](https://github.com/cure53/DOMPurify)
 
