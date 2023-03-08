@@ -24,6 +24,7 @@
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- roboto mono, the font -->
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;300;400;500;700;900&display=swap"
       rel="stylesheet"
@@ -32,6 +33,7 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@500"
     />
+    <!-- favicon -->
     <link
       href="./format_list_bulleted_FILL0_wght400_GRAD0_opsz48.png"
       rel="icon"
@@ -79,8 +81,9 @@
   <body
     class="overflow-x-hidden"
     style="font-family: 'Roboto Mono', sans-serif; background-color: var(--bg)"
-    onload="document.querySelector('textarea').value = localStorage.getItem('text') ?  localStorage.getItem('text') : '# type here'; parse()"
+    onload="localStorage.getItem('text') ? URLtoInput() : '# type here'; parse()"
   >
+    <!-- some basic styles -->
     <style>
       @media (prefers-color-scheme: light) {
         body {
@@ -116,7 +119,7 @@
         user-select: none;
       }
     </style>
-
+    <!-- the navbar at the top, manages everything -->
     <header
       class="navbar navbar-expand border-bottom shadow-sm user-select-none"
       style="font-family: 'Roboto', sans-serif"
@@ -170,6 +173,7 @@
       </div>
     </header>
 
+    <!-- gives an alert to you if you copied the link -->
     <div
       class="alert alert-info alert-dismissible text-center shadow-sm visually-hidden"
       id="copy-link"
@@ -181,6 +185,7 @@
       ></button>
     </div>
 
+    <!-- gives an alert to you if you copied your notes -->
     <div
       class="alert alert-info alert-dismissible text-center shadow-sm visually-hidden"
       id="copy-notes"
@@ -192,6 +197,7 @@
       ></button>
     </div>
 
+    <!-- just shows an error message -->
     <div
       class="alert alert-warning alert-dismissible text-center shadow-sm visually-hidden"
       id="show-cors-error"
@@ -203,9 +209,10 @@
       ></button>
     </div>
 
+    <!-- the main place where you write and see your notes -->
     <div class="container-fluid mt-2 h-75" style="width: 98%">
       <div class="row">
-        <div class="col-6 text-center justify-content-center" id="input">
+        <div class="col-6 text-center" id="input">
           <textarea
             class="shadow-sm border rounded w-100 p-2"
             style="
@@ -213,12 +220,12 @@
               background-color: var(--bg);
               color: var(--text);
             "
-            rows="20"
+            rows="15"
           ></textarea>
         </div>
         <div
           class="col-6 border rounded shadow-sm markdown-body"
-          style="width: 49%; padding: 15px"
+          style="width: 49%; padding: 15px; height: fit-content"
           id="output"
         ></div>
       </div>
@@ -231,6 +238,7 @@
         addtoURL();
       });
 
+      // convert from markdown code to HTML
       function parse() {
         document.querySelector("#output").innerHTML = DOMPurify.sanitize(
           window.markdownit().render(document.querySelector("textarea").value)
@@ -249,12 +257,14 @@
         URLtoInput();
       }
 
+      // convert the url string to the input value
       function URLtoInput() {
         const url = new URL(window.location);
         const notes = new URLSearchParams(url.search).get("notes");
         document.querySelector("textarea").value = notes;
       }
 
+      // add whatever is in the input to the url
       function addtoURL() {
         const url = new URL(window.location);
         const notes = document.querySelector("textarea").value;
@@ -262,6 +272,7 @@
         window.history.pushState(null, null, url);
       }
 
+      // add the option to export your notes as an image
       function exportNotes() {
         domtoimage
           .toPng(document.querySelector("#output"))
@@ -279,6 +290,7 @@
           });
       }
 
+      // make the output take up 100% of the screen
       function hide() {
         document.querySelector("#input").classList.toggle("visually-hidden");
         document.querySelector("#output").classList.toggle("col-6");
@@ -290,6 +302,7 @@
           : "arrow_back_ios";
       }
 
+      // copy the link to share notes
       function copyLink() {
         navigator.clipboard.writeText(window.location.href);
         document
@@ -297,6 +310,7 @@
           .classList.remove("visually-hidden");
       }
 
+      // copy your notes
       function copyNotes() {
         navigator.clipboard.writeText(document.querySelector("textarea").value);
         document
