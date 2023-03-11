@@ -12,6 +12,8 @@
 - [github-markdown-css](https://github.com/sindresorhus/github-markdown-css)
 - [dom-to-image](https://github.com/tsayen/dom-to-image)
 - [DOMPurify](https://github.com/cure53/DOMPurify)
+- [highlight.js](https://highlightjs.org/)
+- [KaTeX](https://katex.org)
 
 ### Credit
 - Favicon from [Material Symbols](https://fonts.google.com/icons)
